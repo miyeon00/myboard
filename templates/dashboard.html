@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+
+{% block title %}BIG COMPANY 고용, 주가 대시보드{% endblock %}
+
+{% block content %}
+<style>
+    /* 전체 배경 */
+    .dashboard-wrapper {
+        background-color: #f4f7f6;
+        padding: 40px 20px;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* 모든 자식 요소를 중앙 정렬 */
+    }
+
+    /* 모든 섹션의 공통 너비 설정 (핵심) */
+    .content-container {
+        width: 100%;
+        max-width: 1200px; /* 여기서 너비를 딱 맞춥니다 */
+        margin: 0 auto;
+    }
+
+    .dashboard-title {
+        text-align: center;
+        margin-bottom: 40px;
+        color: #2c3e50;
+    }
+
+    /* 차트 그리드 */
+    .chart-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+
+    .chart-card {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.06);
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .chart-card img {
+        width: 100%; /* 카드 너비에 꽉 채움 */
+        height: auto;
+        display: block;
+    }
+
+    /* 인사이트 섹션 너비 맞춤 */
+    .insight-section {
+        margin-bottom: 40px;
+    }
+
+    .insight-card {
+        background: #fff;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        border-left: 8px solid #007bff;
+    }
+
+    .insight-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+    }
+
+    .insight-item {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .insight-item .label {
+        display: inline-block;
+        background: #007bff;
+        color: #fff;
+        padding: 3px 12px;
+        border-radius: 5px;
+        font-size: 0.85rem;
+        margin-bottom: 12px;
+        font-weight: bold;
+    }
+
+    /* 푸터 너비 맞춤 */
+    .dashboard-footer {
+        padding: 25px;
+        background: #fff;
+        border-radius: 12px;
+        color: #777;
+        font-size: 0.9rem;
+        text-align: center; /* 중앙 정렬로 변경하여 깔끔하게 */
+        border-top: 3px solid #eee;
+    }
+
+    /* 반응형 처리 */
+    @media (max-width: 992px) {
+        .chart-grid, .insight-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="dashboard-wrapper">
+    <div class="content-container">
+        
+        <div class="dashboard-title">
+            <h1>📊 BIG COMPANY 인사이트 대시보드</h1>
+            <p>데이터 기반 글로벌 기업 고용 및 가치 분석</p>
+        </div>
+
+        <div class="chart-grid">
+            {% for chart in charts %}
+            <div class="chart-card">
+                <img src="data:image/png;base64,{{ chart }}" alt="분석 차트">
+            </div>
+            {% endfor %}
+        </div>
+
+        <section class="insight-section">
+            <div class="insight-card">
+                <h3 style="margin-top:0;"><span style="margin-right:10px;">🔍</span> 종합 분석 및 평가</h3>
+                <div class="insight-grid">
+                    <div class="insight-item">
+                        <span class="label">고용 시장 현황</span>
+                        <p>현재 분석 대상 기업의 총 고용 인원은 <strong>{{ "{:,}".format(summary.total_emp) }}명</strong>입니다. 특히 <strong>{{ summary.top_company }}</strong>이(가) 가장 압도적인 고용 규모를 유지하며 시장의 중심축 역할을 하고 있습니다.</p>
+                    </div>
+                    <div class="insight-item">
+                        <span class="label">주가 및 가치 평가</span>
+                        <p>평균 주가는 <strong>${{ summary.avg_price }}</strong>로 집계되었습니다. <strong>{{ summary.top_price_company }}</strong>의 주가가 가장 높게 형성되어 있으며, 이는 고용 규모와 반드시 비례하지 않는 '고부가가치 기업'의 특성을 보여줍니다.</p>
+                    </div>
+                    <div class="insight-item">
+                        <span class="label">지역적 특성</span>
+                        <p>데이터상 <strong>{{ summary.top_country }}</strong> 소재 기업의 비중이 가장 높습니다. 이는 특정 국가에 글로벌 거대 기업의 본사가 집중되어 있는 산업 클러스터 현상을 반영합니다.</p>
+                    </div>
+                    <div class="insight-item">
+                        <span class="label">향후 전망</span>
+                        <p>상관계수 분석 결과, 고용 인원과 기업 가치 간의 연결 고리가 확인되었습니다. 인적 자원 확보가 기업 성장의 핵심 동력임을 시사하며, 지속적인 인력 유입이 주가 상승의 선행 지표가 될 가능성이 높습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="dashboard-footer">
+            <p><strong>Data Source:</strong> Kaggle Biggest Companies in the World</p>
+            <p>Analysis by <strong>Python Seaborn & Flask Framework</strong> | © 2026 BIG COMPANY</p>
+        </footer>
+
+    </div> </div>
+{% endblock %}
